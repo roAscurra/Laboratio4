@@ -24,7 +24,7 @@ function respuestaLogin(respuesta){
             window.location.href = "vistas/lista.html";
             break;
         case "ERROR":
-            msjerror.removeAttribute('hidden');
+            msjerror.style.display = 'block';
             break;
     }
 }
