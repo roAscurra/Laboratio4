@@ -1,0 +1,91 @@
+.bloqueado{
+    background-color: #fd9f8b;
+}
+.desbloqueado{
+    background-color: #cef8c6;
+}
+#formLogin {
+    width: 50%;
+    margin: 0 auto;
+    padding-left: 3%;
+    padding-right: 3%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding-top: 2%;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+input{
+    padding: 1%; 
+    margin-bottom: 2%; 
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+label{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1%;
+}
+.btnEnviar{
+    padding: 1%;
+    margin-bottom: 3%;
+}
+#error{
+    background-color: #ff7171;
+    width: 40%;
+    margin: 0 auto;
+    padding: 0.5%;
+    text-align: center;
+    display: none;
+    font-size: large;
+    border: 2px solid #000; 
+}
+
+#tablaDatos {
+    margin: 0 auto; 
+    border: 1px solid #000; 
+    border-collapse: collapse;
+}
+
+#tablaDatos tr {
+    height: 50px; 
+    border: 1px solid #000; 
+
+}
+
+#tablaDatos th {
+    background-color: #ffff; 
+    text-align: center; 
+    border: 1px solid #000; 
+
+}
+
+#tablaDatos td {
+    text-align: center; 
+    border: 1px solid #000; 
+}
+#bloquear{
+    background-image: url(../img/pulgarAbajo.png); 
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center; 
+    border: none; 
+    width: 50px; 
+    height: 50px; 
+    cursor: pointer; 
+}
+#desbloquear{
+    background-image: url(../img/pulgarArriba.png); 
+    background-size: cover;
+    background-repeat: no-repeat; 
+    background-position: center; 
+    border: none; 
+    width: 50px; 
+    height: 50px; 
+    cursor: pointer;
+}
