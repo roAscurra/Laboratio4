@@ -36,16 +36,15 @@ label{
     margin-bottom: 3%;
 }
 #error{
-    background-color: #ff7171;
-    width: 40%;
-    margin: 0 auto;
-    padding: 0.5%;
-    text-align: center;
+    color: #ff0000;
+    text-align: left;
     display: none;
     font-size: large;
-    border: 2px solid #000; 
+    margin-bottom: 2%;
 }
-
+#title{
+    text-align: center;
+}
 #tablaDatos {
     margin: 0 auto; 
     border: 1px solid #000; 
@@ -53,23 +52,26 @@ label{
 }
 
 #tablaDatos tr {
-    height: 50px; 
+    height: 50px;
+    width: 40px; 
     border: 1px solid #000; 
-
 }
 
 #tablaDatos th {
     background-color: #ffff; 
-    text-align: center; 
+    padding: 5px;
+    text-align: left; 
     border: 1px solid #000; 
-
 }
 
 #tablaDatos td {
-    text-align: center; 
+    padding: 5px;
+    text-align: left; 
     border: 1px solid #000; 
+    width: 100px;
 }
 #bloquear{
+    padding: 5px;
     background-image: url(../img/pulgarAbajo.png); 
     background-size: cover;
     background-repeat: no-repeat; 
@@ -80,6 +82,7 @@ label{
     cursor: pointer; 
 }
 #desbloquear{
+    padding: 5px;
     background-image: url(../img/pulgarArriba.png); 
     background-size: cover;
     background-repeat: no-repeat; 

@@ -65,15 +65,24 @@ function desbloquearUser(idUser){
 
 document.addEventListener('click', function(event) {
     if (event.target.id === 'desbloquear') {
-        const id = event.target.getAttribute('data-id');
-        desbloquearUser(id);
+        if (event.target.classList.contains('desbloqueado')) {
+            alert("El usuario ya se encuentra desbloqueado.")
+        }else{
+            const id = event.target.getAttribute('data-id');
+            desbloquearUser(id);
+        }
     }
 });
 
 document.addEventListener('click', function(event) {
     if (event.target.id === 'bloquear') {
-        const id = event.target.getAttribute('data-id');
-        bloquearUser(id);
+        if (event.target.classList.contains('bloqueado')) {
+            alert("El usuario ya se encuentra bloqueado.");
+        }else{
+            const id = event.target.getAttribute('data-id');
+            bloquearUser(id);
+        }
+
     }
 });
 
