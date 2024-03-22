@@ -63,6 +63,39 @@ function desbloquearUser(idUser){
     .catch((error) => console.error("Error:", error));
 }
 
+function buscadorUsuarios(){
+    let error = document.getElementById("sinResultados");
+    let valor = document.getElementById("inputBuscador").value;
+    let tabla = document.getElementById("contenedorTabla");
+
+    url = 'http://168.194.207.98:8081/tp/lista.php?action=BUSCAR&usuario='+valor;
+    fetch(url)
+    .then((res) => {
+        if (res.ok) {
+            // Si la respuesta es exitosa, devolver el JSON
+            return res.json();
+        } else {
+            throw new Error('Respuesta del servidor no exitosa');
+        }
+    })
+    .then((jsonData) => {
+        if(jsonData.length == 0){
+            error.style.display = 'flex';
+            tabla.style.display = 'none';
+        }else{
+            error.style.display = 'none';
+            tabla.style.display = 'flex';
+            mostrarEnTabla(jsonData);
+        }
+    })
+    .catch((error) => console.error("Error:", error));
+}
+
+let btnBuscar = document.getElementById("btnBuscar");
+btnBuscar.addEventListener('click', function() {
+    buscadorUsuarios();
+});
+
 document.addEventListener('click', function(event) {
     if (event.target.id === 'desbloquear') {
         if (event.target.classList.contains('desbloqueado')) {

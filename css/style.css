@@ -16,7 +16,7 @@
     padding-top: 2%;
     box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 }
-input{
+.inputLogin{
     padding: 1%; 
     margin-bottom: 2%; 
     border: 1px solid #ccc;
@@ -45,10 +45,15 @@ label{
 #title{
     text-align: center;
 }
+#contenedorTabla{
+    width: 50%;
+    margin: 0 auto; 
+}
 #tablaDatos {
     margin: 0 auto; 
     border: 1px solid #000; 
     border-collapse: collapse;
+    width: 100%;
 }
 
 #tablaDatos tr {
@@ -91,4 +96,30 @@ label{
     width: 50px; 
     height: 50px; 
     cursor: pointer;
+}
+#buscador{
+    width: 50%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+}
+#inputBuscador{
+    width: 80%;
+    padding: 5px;
+    margin-right: 2px;
+    margin-bottom: 10px;
+}
+#btnBuscar{
+    width: 18%;
+    padding: 5px; 
+    margin-bottom: 10px; 
+}
+#sinResultados{
+    background-color: #fd9f8b;
+    width: 50%;
+    margin: 0 auto;
+    display: none;
+    justify-content: center; 
+    align-items: center; 
 }

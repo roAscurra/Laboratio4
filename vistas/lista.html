@@ -8,21 +8,30 @@
 </head>
 <body>
     <h1 id="title">Lista de Usuarios</h1>
-    <table id="tablaDatos">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Usuario</th>
-                <th>Bloqueado</th>
-                <th>Apellido</th>
-                <th>Nombre</th>
-                <th>Bloquear</th>
-                <th>Desbloquear</th>
-            </tr>
-        </thead>
-        <tbody id="tbody">
-        </tbody>
-    </table>
+    <div id="buscador">
+        <input type="text" id="inputBuscador" placeholder="Buscar un usuario">
+        <button id="btnBuscar">Buscar</button>
+    </div>
+    <div id="sinResultados">
+        <p>No se encontraron resultados</p>
+    </div>
+    <div id="contenedorTabla">
+        <table id="tablaDatos">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Usuario</th>
+                    <th>Bloqueado</th>
+                    <th>Apellido</th>
+                    <th>Nombre</th>
+                    <th>Bloquear</th>
+                    <th>Desbloquear</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+            </tbody>
+        </table>
+    </div>    
     <script src="../js/lista.js"></script>
 </body>
 </html>
