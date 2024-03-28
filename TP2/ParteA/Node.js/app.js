@@ -39,14 +39,14 @@ connection.connect((err) => {
             const poblacion = response.data[0].population;
             const latitud = response.data[0].latlng[0];
             const longitud = response.data[0].latlng[1];
-            connection.query(`SELECT * FROM pais2 WHERE codigoPais = '${codigoPais}'`, (error, results, fields) => {
+            connection.query(`SELECT * FROM Pais WHERE codigoPais = '${codigoPais}'`, (error, results, fields) => {
               if (error) {
                 console.error('Error al ejecutar la consulta:', error);
                 return;
               }
               if(results.length == 0){
                 inserciones.push(codigoPais);
-                connection.query(`INSERT INTO pais2 (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) 
+                connection.query(`INSERT INTO Pais (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) 
                 VALUES ('${codigoPais}', '${nombrePais}', '${capitalPais}', '${region}', ${poblacion}, ${latitud}, ${longitud})`,
                   (error, results, fields) => {
                     if (error) {
@@ -59,7 +59,7 @@ connection.connect((err) => {
               }else{
                 updates.push(codigoPais)
                   // Si el país ya existe, actualizar sus datos
-                  connection.query(`UPDATE pais2 SET nombrePais = '${nombrePais}', capitalPais = '${capitalPais}', region = '${region}', poblacion = ${poblacion}, latitud = ${latitud}, longitud = ${longitud} 
+                  connection.query(`UPDATE Pais SET nombrePais = '${nombrePais}', capitalPais = '${capitalPais}', region = '${region}', poblacion = ${poblacion}, latitud = ${latitud}, longitud = ${longitud} 
                   WHERE codigoPais = '${codigoPais}'`,
                   (error, results, fields) => {
                   if (error) {

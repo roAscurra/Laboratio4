@@ -75,11 +75,11 @@ foreach ($responses as $index => $response) {
             echo $codigoPais = $codigoPais[0]; 
             echo "<br>"; 
             
-            $sql = "SELECT * FROM pais WHERE codigoPais = '$codigoPais'";
+            $sql = "SELECT * FROM Pais WHERE codigoPais = '$codigoPais'";
             $query = mysqli_query($conn, $sql);
             $numrows = mysqli_num_rows($query);
             if($numrows > 0){
-                $sql2 = "UPDATE pais SET nombrePais = '$nombrePais', capitalPais = '$capitalPais', region = '$region', poblacion = '$poblacion', latitud = '$latitud', longitud = '$longitud'
+                $sql2 = "UPDATE Pais SET nombrePais = '$nombrePais', capitalPais = '$capitalPais', region = '$region', poblacion = '$poblacion', latitud = '$latitud', longitud = '$longitud'
                 WHERE codigoPais = '$codigoPais'";
                 $query2 = mysqli_query($conn, $sql2);
                 if($query2){
@@ -88,7 +88,7 @@ foreach ($responses as $index => $response) {
                 }
             }else{
                 // Insertar los datos en la tabla Pais
-                $sql3 = "INSERT INTO pais (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) 
+                $sql3 = "INSERT INTO Pais (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) 
                 VALUES ('$codigoPais', '$nombrePais', '$capitalPais', '$region', $poblacion, $latitud, $longitud)";
 
                 if (mysqli_query($conn, $sql3) === TRUE) {
@@ -102,6 +102,7 @@ foreach ($responses as $index => $response) {
     } 
 }
 
+// Cerrar la conexión a la base de datos
 mysqli_close($conn);
 
 ?>
