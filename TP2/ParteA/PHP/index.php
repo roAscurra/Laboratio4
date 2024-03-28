@@ -54,9 +54,11 @@ foreach ($responses as $index => $response) {
     if (strpos($response, "Not Found") !== false) {
         // Si se encuentra el mensaje "Not Found", obtener el callingCode a partir del URL
         $callingCode = $index + 1; // El índice más 1 representa el callingCode
-        echo "Error 404 en el callingCode: ".$callingCode."<br>";
+        //echo "Error 404 en el callingCode: ".$callingCode."<br>";
     }
     if (!empty($data)) {
+        // echo json_encode($data, JSON_PRETTY_PRINT);
+        //verifico si todos los datos están presentes para poder insertarlos
         if(isset($data[0]['callingCodes']) && isset($data[0]['name']) && isset($data[0]['capital']) && isset($data[0]['region']) && isset($data[0]['population']) && isset($data[0]['latlng'][0]) && isset($data[0]['latlng'][1])){
             $codigoPais = $data[0]['callingCodes'];
             $nombrePais = $data[0]['name'];
@@ -99,6 +101,9 @@ foreach ($responses as $index => $response) {
         }
     } 
 }
+
+mysqli_close($conn);
+
 ?>
 
 
