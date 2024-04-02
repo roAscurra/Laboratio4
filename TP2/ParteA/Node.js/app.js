@@ -33,9 +33,9 @@ connection.connect((err) => {
         axios.get(`https://restcountries.com/v2/callingcode/${i}`)
           .then(response => {
             const codigoPais = response.data[0].callingCodes;
-            const nombrePais = response.data[0].callingCodes;
-            const capitalPais = response.data[0].callingCodes;
-            const region = response.data[0].callingCodes;
+            const nombrePais = response.data[0].name;
+            const capitalPais = response.data[0].capital;
+            const region = response.data[0].region;
             const poblacion = response.data[0].population;
             const latitud = response.data[0].latlng[0];
             const longitud = response.data[0].latlng[1];
