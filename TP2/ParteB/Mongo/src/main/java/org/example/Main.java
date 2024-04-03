@@ -6,14 +6,9 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
-import org.bson.types.ObjectId;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
-import java.net.URI;
+import javax.print.Doc;
 import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Set;
 
@@ -48,7 +43,7 @@ public class Main {
             String name = "";
             String capital = "";
             String region = "";
-            String codigoPais = "";
+            int codigoPais = 0;
             double poblacion = 0;
             double latitud = 0;
             double longitud = 0;
@@ -98,7 +93,7 @@ public class Main {
 //                            if (jsonObject.has("callingCodes")){
 //                                JSONArray callingCodesArray = jsonObject.getJSONArray("callingCodes");
 //                                if (callingCodesArray.length() >= 1) {
-//                                    codigoPais = callingCodesArray.getString(0);
+//                                    codigoPais = callingCodesArray.getInt(0);
 //                                    // Verificar si el documento ya existe en la colección
 //                                    Document existingDoc = paises.find(new Document("codigoPais", codigoPais)).first();
 //                                    if (existingDoc != null) {
@@ -142,28 +137,32 @@ public class Main {
             System.out.println(positivas);
             System.out.println(negativas);
 
-
-            // Create the document to specify find criteria
-            Document findDocument51 = new Document("region", "Americas");
-            // Document to store query results
-            FindIterable<Document> resultDocuments51 = paises.find(findDocument51);
-            // Iterate over the result documents and print each one
-            for (Document doc : resultDocuments51) {
-                System.out.println(doc.toJson());
-            }
-
-            Document findDocument52 = new Document();
-            findDocument52.append("region", "Americas");
-            findDocument52.append("poblacion", new Document("$gt", 10000000)); // "$gt" representa el operador mayor que
-
-            // Documento para almacenar los resultados de la consulta
-                        FindIterable<Document> resultDocuments = paises.find(findDocument52);
-
-            // Iterar sobre los documentos de resultado y mostrar cada uno
-            for (Document doc : resultDocuments) {
-                System.out.println(doc.toJson());
-            }
-
+            //Llamada a los metodos
+            //5.1
+            System.out.println("Documentos con region igual a Americas");
+            buscarPorRegion(paises);
+            //5.2
+            System.out.println("Documentos con region igual a Americas y poblacion mayor a 100000000");
+            buscarPorRegionYPoblacion(paises);
+            //5.3
+            System.out.println("Documentos con region distinta a Africa");
+            buscarPorRegionDistinta(paises);
+            //5.4
+            actualizarDocumento(paises);
+            //5.5
+            eliminarDocumento(paises);
+            //5.7
+            System.out.println("Documentos con poblacion mayor a 50000000 y menor a 150000000");
+            seleccionPorPoblacion(paises);
+            //5.8
+            System.out.println("Documentos ordenador por nombre en forma ascendente");
+            ordenarPorNombre(paises);
+            //5.9
+            System.out.println("Salto 5 elementos antes de obtener los resultados");
+            usoSkip(paises);
+            //5.10
+            System.out.println("Expresiones regulares para buscar documentos con nombres que contengan -Ar-");
+            expresionesRegulares(paises);
         } else {
             System.out.println("Error: Conexión no establecida");
         }
@@ -179,4 +178,150 @@ public class Main {
 
         return mongo;
     }
+    // punto 5.1
+    private static void buscarPorRegion(MongoCollection<Document> paises) {
+        String region = "Americas";
+        // Crear el documento para especificar los criterios de búsqueda
+        Document filtro = new Document("region", region);
+
+        // Documento para almacenar los resultados de la consulta
+        FindIterable<Document> resultados = paises.find(filtro);
+
+        // Iterar sobre los documentos de resultado y mostrar cada uno
+        for (Document doc : resultados) {
+            System.out.println(doc.toJson());
+        }
+    }
+
+    // punto 5.2
+    private static void buscarPorRegionYPoblacion(MongoCollection<Document> paises) {
+        String region = "Americas";
+        int poblacionMinima = 100000000;
+        // Crear el documento para especificar los criterios de búsqueda
+        Document filtro = new Document();
+        filtro.append("region", region);
+        // "$gt" representa el operador mayor que
+        filtro.append("poblacion", new Document("$gt", poblacionMinima));
+
+        // Documento para almacenar los resultados de la consulta
+        FindIterable<Document> resultados = paises.find(filtro);
+
+        // Iterar sobre los documentos de resultado y mostrar cada uno
+        for (Document doc : resultados) {
+            System.out.println(doc.toJson());
+        }
+    }
+    //punto 5.3
+    public static void buscarPorRegionDistinta(MongoCollection<Document> paises){
+        String region = "Africa";
+        // Crear el documento para especificar los criterios de búsqueda
+        // "$ne" representa el operador distinto de
+        Document filtro = new Document("region", new Document("$ne", region));
+
+        // Documento para almacenar los resultados de la consulta
+        FindIterable<Document> resultados = paises.find(filtro);
+
+        // Iterar sobre los documentos de resultado y mostrar cada uno
+        for(Document doc : resultados){
+            System.out.println(doc.toJson());
+        }
+    }
+
+    // punto 5.4
+    public static void actualizarDocumento(MongoCollection<Document> paises){
+        String name = "Egypt";
+        Document filtro = new Document("name", name);
+
+        Document cambios = new Document("$set", new Document("name", "Egipto").append("poblacion", 95000000));
+
+        // hacemos uso de updateOne porque la consigna dice que solo hay que actualizar el documento y no los documentos
+        // para actualizar mas de uno debemos hacer uso de updateMany
+        paises.updateOne(filtro, cambios);
+
+        System.out.println("Documento actualizado con éxito.");
+
+    }
+
+    // punto 5.5
+    public static void eliminarDocumento(MongoCollection<Document> paises){
+        int codigoPais = 258;
+        Document filtro = new Document("codigoPais", codigoPais);
+
+        // utilizamos deleteOne para eliminar solo un documento
+        paises.deleteOne(filtro);
+
+    }
+    //5.6
+    // Al ejecutar drop() sobre una colección, eliminaremos esa coleccion  de la base de datos y los documentos que contenga
+    // la misma.
+    // Y al ejecutar el método drop() sobre una base de datos, se elimina completamente esa
+    // base de datos y todas las colecciones que contiene.
+    // El metodo drop() es una operación irreversible y una vez realizada no podremos recuperar los datos eliminados
+    // Por esa razón es importante hacer un backup de la coleccion o base de datos a la que vamos a realizarle este método.
+
+
+    // punto 5.7
+    public static void seleccionPorPoblacion(MongoCollection<Document> paises){
+        int pobMayorA = 50000000;
+        int pobMenorA = 150000000;
+        Document filtro = new Document();
+        // "$gt" representa el operador mayor que
+        filtro.append("poblacion", new Document("$gt", pobMayorA));
+        // "$lt" representa el operador menor que
+        filtro.append("poblacion", new Document("$lt", pobMenorA));
+
+        // Realiza la consulta
+        FindIterable<Document> resultados = paises.find(filtro);
+
+        // Iterar sobre los documentos de resultado y mostrar cada uno
+        for (Document doc : resultados) {
+            System.out.println(doc.toJson());
+        }
+    }
+    //5.8
+    private static void ordenarPorNombre(MongoCollection<Document> paises){
+        Document filtro = new Document();
+        // Ordenar los documentos por el campo "name" en forma ascendente
+        Document orden = new Document("name", 1); // "1" para orden ascendente, "-1" para orden descendente
+
+        // Realizar la consulta para seleccionar y ordenar los documentos
+        FindIterable<Document> resultados = paises.find(filtro).sort(orden);
+
+        // Iterar sobre los documentos de resultado y mostrar cada uno
+        for (Document doc : resultados) {
+            System.out.println(doc.toJson());
+        }
+    }
+    //5.9
+    public static void usoSkip(MongoCollection<Document> paises){
+        int numElements = 5;
+
+        // Al ejecutar el método skip() sobre una colección podemos omitir resultados y no
+        // recuperar cierta cantidad de documentos. Debemos pasarle como parámetro la cantidad
+        // de elementos que queremos saltar en nuestra búsqueda. En el ejemplo vamos a omitir los primeros
+        // 5 documentos de la coleccion.
+
+        // Realiza la consulta
+        FindIterable<Document> resultados = paises.find().skip(numElements);
+
+        // Iterar sobre los documentos de resultado y mostrar cada uno
+        for (Document doc : resultados) {
+            System.out.println(doc.toJson());
+        }
+    }
+    //5.10
+    public static void expresionesRegulares(MongoCollection<Document> paises){
+        Document filtro = new Document("name", new Document("$regex", ".*Ar.*"));
+
+        // Realiza la consulta
+        FindIterable<Document> resultados = paises.find(filtro);
+
+        // Itera sobre los documentos de resultado y muestra cada uno
+        for (Document doc : resultados) {
+            System.out.println(doc.toJson());
+        }
+    }
+    //5.11
+
+
 }

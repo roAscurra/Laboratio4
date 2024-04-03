@@ -1,6 +1,8 @@
 <?php
 include "cnx/cnx.php";
-
+$inserciones = 0;
+$actualizaciones = 0;
+$sinDatos = 0;
 // Función para hacer solicitudes en paralelo y evitar retardo en la ejecución
 function solicitudes($urls) {
     $multiHandler = curl_multi_init();
@@ -38,6 +40,36 @@ function controllerCurl($url, $multiHandler) {
     return $ch;
 }
 
+function seleccionarPais($codigoPais) {
+    global $conn;
+    $sql = "SELECT * FROM Pais WHERE codigoPais = '$codigoPais'";
+    $query = mysqli_query($conn, $sql);
+    return $query;
+}
+
+function insertarPais($codigoPais, $nombrePais, $capitalPais, $region, $poblacion, $latitud, $longitud) {
+    global $conn;
+    $nombrePais = mysqli_real_escape_string($conn, $nombrePais);
+    $capitalPais = mysqli_real_escape_string($conn, $capitalPais);
+    $region = mysqli_real_escape_string($conn, $region);
+
+    $sql = "INSERT INTO Pais (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) 
+            VALUES ('$codigoPais', '$nombrePais', '$capitalPais', '$region', $poblacion, $latitud, $longitud)";
+
+    return mysqli_query($conn, $sql);
+}
+
+function actualizarPais($codigoPais, $nombrePais, $capitalPais, $region, $poblacion, $latitud, $longitud) {
+    global $conn;
+    $nombrePais = mysqli_real_escape_string($conn, $nombrePais);
+    $capitalPais = mysqli_real_escape_string($conn, $capitalPais);
+    $region = mysqli_real_escape_string($conn, $region);
+
+    $sql = "UPDATE Pais SET nombrePais = '$nombrePais', capitalPais = '$capitalPais', region = '$region', poblacion = '$poblacion', latitud = '$latitud', longitud = '$longitud'
+            WHERE codigoPais = '$codigoPais'";
+
+    return mysqli_query($conn, $sql);
+}
 // Array para almacenar las URLs de las solicitudes a la API
 $urls = [];
 for ($callingCode = 1; $callingCode <= 300; $callingCode++) {
@@ -72,36 +104,38 @@ foreach ($responses as $index => $response) {
             $capitalPais = mysqli_real_escape_string($conn, $capitalPais);
             $region = mysqli_real_escape_string($conn, $region);
             
-            echo $codigoPais = $codigoPais[0]; 
-            echo "<br>"; 
+            $codigoPais = $codigoPais[0]; 
             
-            $sql = "SELECT * FROM Pais WHERE codigoPais = '$codigoPais'";
-            $query = mysqli_query($conn, $sql);
+            // Verificar si el país ya existe en la base de datos
+            $query = seleccionarPais($codigoPais);
             $numrows = mysqli_num_rows($query);
+
             if($numrows > 0){
-                $sql2 = "UPDATE Pais SET nombrePais = '$nombrePais', capitalPais = '$capitalPais', region = '$region', poblacion = '$poblacion', latitud = '$latitud', longitud = '$longitud'
-                WHERE codigoPais = '$codigoPais'";
-                $query2 = mysqli_query($conn, $sql2);
-                if($query2){
-                    echo "Se actualizó el registro con códigoPais igual a ".$codigoPais;
-                    echo "<br>"; 
+                // Si el país existe, actualizar sus datos
+                $resultado = actualizarPais($codigoPais, $nombrePais, $capitalPais, $region, $poblacion, $latitud, $longitud);
+                if($resultado){
+                    $actualizaciones++;
+                } else {
+                    echo "Error al actualizar datos de $codigoPais: " . mysqli_error($conn) . "<br>";
                 }
             }else{
-                // Insertar los datos en la tabla Pais
-                $sql3 = "INSERT INTO Pais (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) 
-                VALUES ('$codigoPais', '$nombrePais', '$capitalPais', '$region', $poblacion, $latitud, $longitud)";
-
-                if (mysqli_query($conn, $sql3) === TRUE) {
-                    echo "Datos de $codigoPais insertados correctamente.<br>";
-                } else {
+                // Si el país no existe, insertar sus datos
+                $resultado = insertarPais($codigoPais, $nombrePais, $capitalPais, $region, $poblacion, $latitud, $longitud);
+                if($resultado){
+                    $inserciones++;
+                }else{
                     echo "Error al insertar datos de $nombrePais: " . $conn->error . "<br>";
                 }
             }
 
         }
-    } 
+    }else{
+        $sinDatos++;
+    }
 }
-
+echo 'Inserciones: '. $inserciones . '<br>';
+echo 'Actualizaciones: '. $actualizaciones .'<br>';
+echo 'Sin datos: '. $sinDatos . '<br>';
 // Cerrar la conexión a la base de datos
 mysqli_close($conn);
 
