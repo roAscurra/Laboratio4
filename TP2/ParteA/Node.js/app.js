@@ -163,10 +163,6 @@ connection.connect((err) => {
 
   const insertarPais = (connection, codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) => {
     if (!closingConnection && connection.state === 'authenticated') { // Verificar si la conexión está establecida y no se está cerrando
-      seleccionPais(connection, codigoPais)
-        .then(results => {
-          if (results.length === 0) {
-            // El país no existe, se puede insertar
             connection.query(
               `INSERT INTO Pais (codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud) VALUES (?, ?, ?, ?, ?, ?, ?)`,
               [codigoPais, nombrePais, capitalPais, region, poblacion, latitud, longitud],
@@ -180,26 +176,6 @@ connection.connect((err) => {
                 }
               }
             );
-          } else {
-            // El país ya existe, se puede actualizar
-            connection.query(
-              `UPDATE Pais SET nombrePais = ?, capitalPais = ?, region = ?, poblacion = ?, latitud = ?, longitud = ? WHERE codigoPais = ?`,
-              [nombrePais, capitalPais, region, poblacion, latitud, longitud, codigoPais],
-              (error, results, fields) => {
-                if (error) {
-                  console.error('Error al actualizar el país ' + codigoPais + ': ', error);
-                  return;
-                } else {
-                  // console.log(`País ${nombrePais} actualizado correctamente.`);
-                  updates.push(codigoPais);
-                }
-              }
-            );
-          }
-        })
-        .catch(error => {
-          console.error('Error al verificar la existencia del país:', error);
-        });
       }else{
         console.error('La conexión no está activa');
       }
